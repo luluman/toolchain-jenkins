@@ -47,7 +47,8 @@ pipeline {
                             def jobName = b.getProjectName()
                             def blueBuildURL = buildURL.replace("job/${jobName}", "blue/organizations/jenkins/${jobName}/detail/${jobName}")
                             emailext subject: 'TPU-MLIR daily-test failed',
-                                to: author_email,
+                                // to: author_email,
+                                to: "man.lu@sophgo.com",
                                 body: """
 TPU-MLIR failed to pass some tests due to this commit:
 
