@@ -16,16 +16,16 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                dir("$WORKSPACE") {
-                    sh """#!/bin/bash
-                        set -e
-                        rm -rf *
-                        git clone --depth=1 file:////git-repository/tpu-mlir.git
-                        ln -s /git-repository/model-zoo model-zoo
-                        cd tpu-mlir
-                        git show -s
-                    """
-                }
+                // dir("$WORKSPACE") {
+                //     sh """#!/bin/bash
+                //         set -e
+                //         rm -rf *
+                //         git clone --depth=1 file:////git-repository/tpu-mlir.git
+                //         ln -s /git-repository/model-zoo model-zoo
+                //         cd tpu-mlir
+                //         git show -s
+                //     """
+                // }
                 dir("$WORKSPACE/tpu-mlir") {
                     script {
                         X86_WORKSPACE = WORKSPACE
@@ -39,36 +39,36 @@ pipeline {
                 }
             }
         }
-        stage('Build-TPU-MLIR') {
-            steps {
-                dir("$WORKSPACE/tpu-mlir") {
-                    sh """#!/bin/bash
-                        set -e
-                        source ./envsetup.sh
-                        ./build.sh
-                    """
-                }
-            }
-        }
+        // stage('Build-TPU-MLIR') {
+        //     steps {
+        //         dir("$WORKSPACE/tpu-mlir") {
+        //             sh """#!/bin/bash
+        //                 set -e
+        //                 source ./envsetup.sh
+        //                 ./build.sh
+        //             """
+        //         }
+        //     }
+        // }
         stage('Build-Model-Zoo') {
             steps {
                 dir("$WORKSPACE") {
-                    sh """#!/bin/bash
-                        set -e
-                        cd tpu-mlir/
-                        source ./envsetup.sh
-                        cd ../
-                        mkdir python -p
-                        pip install https://github.com/sophgo/tpu-perf/releases/download/v1.1.5/tpu_perf-1.1.5-py3-none-manylinux2014_x86_64.whl --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/ -t python
-                    """
-                    sh """#!/bin/bash
-                        set +e
-                        cd tpu-mlir/
-                        source ./envsetup.sh
-                        export PYTHONPATH=$WORKSPACE/python:\$PYTHONPATH
-                        cd ../model-zoo/
-                        python3 -m tpu_perf.build --mlir --list full_cases.txt
-                    """
+                    // sh """#!/bin/bash
+                    //     set -e
+                    //     cd tpu-mlir/
+                    //     source ./envsetup.sh
+                    //     cd ../
+                    //     mkdir python -p
+                    //     pip install https://github.com/sophgo/tpu-perf/releases/download/v1.1.5/tpu_perf-1.1.5-py3-none-manylinux2014_x86_64.whl --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/ -t python
+                    // """
+                    // sh """#!/bin/bash
+                    //     set +e
+                    //     cd tpu-mlir/
+                    //     source ./envsetup.sh
+                    //     export PYTHONPATH=$WORKSPACE/python:\$PYTHONPATH
+                    //     cd ../model-zoo/
+                    //     python3 -m tpu_perf.build --mlir --list full_cases.txt
+                    // """
                     sh """
                         rm model-zoo
                         git clone /git-repository/model-zoo
