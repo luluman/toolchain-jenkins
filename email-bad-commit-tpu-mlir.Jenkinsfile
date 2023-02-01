@@ -17,21 +17,18 @@ pipeline {
                 echo "TPU-MLIR version: ${params.COMMIT_SHA}\nModels:\n${params.CHECK_MODELS}"
             }
         }
-        stage('Checkout') {
+        stage('Setup') {
             steps {
                 dir("$WORKSPACE") {
                     sh """#!/bin/bash
                         set -e
                         rm -rf *
-                        git clone file:////git-repository/tpu-mlir.git
-                        cd tpu-mlir
-                        git checkout ${params.COMMIT_SHA} -q
-                        git show -s
+                        ln -s /git-repository/tpu-mlir tpu-mlir
                     """
                 }
             }
         }
-        stage('Test') {
+        stage('Send') {
             steps {
                 script {
                     dir("$WORKSPACE/tpu-mlir") {
