@@ -122,7 +122,7 @@ pipeline {
                                     -c "UPDATE bm1684x_performance SET model_zoo_sha='$MODEL_ZOO_SHA' WHERE model_zoo_sha IS NULL;"
 
                                psql -h 172.28.3.47 -p 8083 -U $PGDB_CREDS_USR -d tpu_mlir \\
-                                    -c "UPDATE bm1684x_performance SET date=now() WHERE date IS NULL;"
+                                    -c "UPDATE bm1684x_performance SET date=CURRENT_TIMESTAMP WHERE date IS NULL;"
                             """
                         }
 
