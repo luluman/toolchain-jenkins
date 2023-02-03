@@ -23,7 +23,7 @@ pipeline {
                     sh """#!/bin/bash
                         set -e
                         rm -rf *
-                        ln -s /git-repository/tpu-mlir tpu-mlir
+                        ln -s /git-repository/tpu-mlir.git tpu-mlir
                     """
                 }
             }
