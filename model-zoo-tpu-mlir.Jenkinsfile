@@ -25,7 +25,7 @@ pipeline {
                                 git clone --depth=1 file:////git-repository/tpu-mlir.git
                                 ln -s /git-repository/model-zoo model-zoo
                                 cd tpu-mlir
-                               git show -s
+                                git show -s
                             """
                         }
                         dir("$WORKSPACE/tpu-mlir") {
@@ -70,6 +70,7 @@ pipeline {
                                 export PYTHONPATH=$WORKSPACE/python:\$PYTHONPATH
                                 cd ../model-zoo/
                                 python3 -m tpu_perf.build --mlir --list full_cases.txt || true
+                                find ./output -name "*.npz" -type f -delete
                             """
                             sh """
                                 rm -f model-zoo
@@ -123,10 +124,18 @@ pipeline {
 
                                psql -h 172.28.3.47 -p 8083 -U $PGDB_CREDS_USR -d tpu_mlir \\
                                     -c "UPDATE bm1684x_performance SET date=CURRENT_TIMESTAMP WHERE date IS NULL;"
-                            """
+
+                               psql -h 172.28.3.47 -p 8083 -U $PGDB_CREDS_USR -d tpu_mlir -c \\
+                                    "WITH v_tmp_table AS \\
+                                    ( \\
+                                        SELECT avg(\\"time(ms)\\") OVER (PARTITION BY name, shape) AS t_ag, id \\
+                                        FROM bm1684x_performance \\
+                                    ) \\
+                                    UPDATE bm1684x_performance SET \\"time_avg(ms)\\" = v_tmp_table.t_ag \\
+                                    FROM v_tmp_table \\
+                                    WHERE bm1684x_performance.id = v_tmp_table.id;"
+                             """
                         }
-
-
                     }
                 }
             }
