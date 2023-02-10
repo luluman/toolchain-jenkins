@@ -10,9 +10,7 @@ pipeline {
                     def projects = ['tpu-mlir',
                                     'nnmodels',
                                     'model-zoo-internal',
-                                    'model-zoo-internal-release',
-                                    'model-zoo',
-                                    'model-zoo-stable'
+                                    'model-zoo'
                     ]
 
                     for (int i = 0; i < projects.size(); ++i) {
@@ -27,7 +25,7 @@ pipeline {
                                     git clean -ffdx
                                     git reset --hard HEAD
                                     git remote update
-                                    git pull origin master
+                                    git pull --all --ff-only
                                     git-lfs install
                                     git lfs fetch --all
                                     git lfs pull --include="*" --exclude=""
