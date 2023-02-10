@@ -17,8 +17,10 @@ pipeline {
         stage("MODEL-ZOO-BASE-Prepare") {
             steps {
                 dir("/git-repository/$params.MODEL_ZOO_REPO") {
-                    sh """
+                    sh """#!/bin/bash
+                        set -e
                         git checkout ${params.MODEL_ZOO_BRANCH}
+                        git reset --hard origin/${params.MODEL_ZOO_BRANCH}
                         git lfs checkout .
                    """
                 }
