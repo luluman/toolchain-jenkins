@@ -7,7 +7,13 @@ pipeline {
             steps {
 
                 script {
-                    def projects = ['tpu-mlir', 'nnmodels', 'model-zoo-internal']
+                    def projects = ['tpu-mlir',
+                                    'nnmodels',
+                                    'model-zoo-internal',
+                                    'model-zoo-internal-release',
+                                    'model-zoo',
+                                    'model-zoo-stable'
+                    ]
 
                     for (int i = 0; i < projects.size(); ++i) {
                         withCredentials([gitUsernamePassword(credentialsId: '5ca28ee4-187f-4ce5-b19d-f8c805ffb7a4', gitToolName: 'git-tool')]) {
