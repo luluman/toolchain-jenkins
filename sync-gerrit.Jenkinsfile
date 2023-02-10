@@ -21,6 +21,7 @@ pipeline {
                                 export GIT_SSL_NO_VERIFY=1
                                 if [ -d ${projects[i]} ];then
                                     cd ${projects[i]}
+                                    echo $PWD
                                     git-lfs uninstall
                                     git clean -ffdx
                                     git reset --hard HEAD
