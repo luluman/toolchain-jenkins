@@ -43,8 +43,11 @@ pipeline {
                                 git clone --depth=1 --branch=${params.TPU_MLIR_BRANCH} file:////git-repository/tpu-mlir.git
                                 ln -s /git-repository/${params.MODEL_ZOO_REPO} ${params.MODEL_ZOO_REPO}
                                 cd tpu-mlir
+                                echo "tpu-mlir version"
                                 git show -s
+                                echo "-------------------------------"
                                 cd ../${params.MODEL_ZOO_REPO}
+                                echo "${params.MODEL_ZOO_REPO} version"
                                 git show -s
                             """
                         }
