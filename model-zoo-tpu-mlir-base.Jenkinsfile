@@ -14,7 +14,17 @@ pipeline {
         MODEL_ZOO_SHA = ""
     }
     stages {
-        stage("${params.MODEL_ZOO_REPO}-Build") {
+        stage("MODEL-ZOO-BASE-Prepare") {
+            steps {
+                dir("/git-repository/$params.MODEL_ZOO_REPO") {
+                    sh """
+                        git checkout ${params.MODEL_ZOO_BRANCH}
+                        git lfs checkout .
+                   """
+                }
+            }
+        }
+        stage("MODEL-ZOO-BASE-Build") {
             agent {
                 docker {
                     image 'sophgo/tpuc_dev'
@@ -28,10 +38,9 @@ pipeline {
                             sh """#!/bin/bash
                                 set -e
                                 rm -rf *
-                                git clone --depth=1 --brach=${params.TPU_MLIR_BRANCH} file:////git-repository/tpu-mlir.git
+                                git clone --depth=1 --branch=${params.TPU_MLIR_BRANCH} file:////git-repository/tpu-mlir.git
                                 ln -s /git-repository/${params.MODEL_ZOO_REPO} ${params.MODEL_ZOO_REPO}
-                                cd ${params.MODEL_ZOO_REPO}
-                                git lfs checkout ${params.MODEL_ZOO_BRANCH}
+                                cd tpu-mlir
                                 git show -s
                                 cd ../${params.MODEL_ZOO_REPO}
                                 git show -s
@@ -61,7 +70,7 @@ pipeline {
                         }
                     }
                 }
-                stage("Build-${params.MODEL_ZOO_REPO}") {
+                stage("Build-MODEL-ZOO-BASE") {
                     steps {
                         dir("$WORKSPACE") {
                             sh """#!/bin/bash
@@ -83,7 +92,7 @@ pipeline {
                             """
                             sh """
                                 rm -f ${params.MODEL_ZOO_REPO}
-                                git clone /git-repository/${params.MODEL_ZOO_REPO}
+                                git clone /git-repository/${params.MODEL_ZOO_REPO} --branch ${params.MODEL_ZOO_BRANCH}
                                 mv -f /git-repository/${params.MODEL_ZOO_REPO}/output ./${params.MODEL_ZOO_REPO}/
                                 cd ${params.MODEL_ZOO_REPO}
                                 chmod -R 777 ./output
@@ -93,10 +102,10 @@ pipeline {
                 }
             }
         }
-        stage("Test-${params.MODEL_ZOO_REPO}") {
+        stage("Test-MODEL-ZOO-BASE") {
             agent { label "bm1684x" }
             stages {
-                stage("${params.MODEL_ZOO_REPO}-Test") {
+                stage("MODEL-ZOO-BASE-Test") {
                     steps {
                         dir("$WORKSPACE") {
                             sh """#!/bin/bash
