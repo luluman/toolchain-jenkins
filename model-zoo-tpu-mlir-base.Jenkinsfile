@@ -167,6 +167,11 @@ pipeline {
                     }
                 }
             }
+            post {
+                always {
+                    archiveArtifacts artifacts: "${WORKSPACE}/../x86-agent-workspace/${X86_JOB_NAME}/${params.MODEL_ZOO_REPO}/output/stats.csv", onlyIfSuccessful: true
+                }
+            }
         }
     }
     // post {
