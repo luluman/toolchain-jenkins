@@ -24,9 +24,8 @@ pipeline {
                                     echo $PWD
                                     git-lfs uninstall
                                     git clean -ffdx
-                                    git reset --hard HEAD
+                                    git reset --hard origin/\$(git branch --show-current)
                                     git remote update
-                                    git pull --all --ff-only
                                     git-lfs install
                                     git lfs fetch --all
                                     git lfs pull --include="*" --exclude=""

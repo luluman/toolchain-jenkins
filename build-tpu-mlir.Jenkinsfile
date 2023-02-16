@@ -34,6 +34,9 @@ pipeline {
             }
         }
         stage('Test') {
+            options {
+                timeout(time: 4, unit: 'HOURS')   // timeout on this stage
+            }
             steps {
                 dir("$WORKSPACE/tpu-mlir") {
                     sh """#!/bin/bash
@@ -69,20 +72,7 @@ pipeline {
                                         ], wait: true, propagate: false
                                 def varb = b.getResult()
                                 if (varb == "SUCCESS") {
-                                    // test all
-                                    b = build job: 'blame-commit-tpu-mlir', parameters: [
-                                        string(name: 'COMMIT_SHA', value: commit),
-                                        text(name: 'CHECK_MODELS', value: ''),
-                                        booleanParam(name: 'FAIL_FAST', value: true)
-                                        ], wait: true, propagate: false
-                                    varb = b.getResult()
-                                    if (varb == "SUCCESS") {
-                                        build job: 'email-bad-commit-tpu-mlir', parameters: [
-                                            string(name: 'COMMIT_SHA', value: first_bad),
-                                            text(name: 'CHECK_MODELS', value: failed_models)
-                                        ], wait: false, propagate: false
-                                        error("Bad commit introduced in:\n ${first_bad}.")
-                                    }
+                                    error("Bad commit introduced in:\n ${first_bad}.")
                                 } else {
                                     first_bad = commit
                                 }

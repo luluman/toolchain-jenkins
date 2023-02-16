@@ -8,6 +8,9 @@ pipeline {
         booleanParam(name: 'COMMIT_TO_DATASET', defaultValue: false, description: 'Whether commit report to database.')
     }
     agent any
+    options {
+        timeout(time: 2, unit: 'HOURS')   // timeout on whole pipeline job
+    }
     environment {
         X86_JOB_NAME = ""
         TPU_MLIR_SHA = ""
