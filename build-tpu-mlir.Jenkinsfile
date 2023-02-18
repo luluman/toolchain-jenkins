@@ -72,6 +72,10 @@ pipeline {
                                         ], wait: true, propagate: false
                                 def varb = b.getResult()
                                 if (varb == "SUCCESS") {
+                                    build job: 'email-bad-commit-tpu-mlir', parameters: [
+                                        string(name: 'COMMIT_SHA', value: first_bad),
+                                        text(name: 'CHECK_MODELS', value: failed_models)
+                                    ], wait: false, propagate: false
                                     error("Bad commit introduced in:\n ${first_bad}.")
                                 } else {
                                     first_bad = commit
