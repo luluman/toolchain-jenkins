@@ -9,7 +9,7 @@ pipeline {
     }
     agent any
     options {
-        timeout(time: 2, unit: 'HOURS')   // timeout on whole pipeline job
+        timeout(time: 5, unit: 'HOURS')   // timeout on whole pipeline job
     }
     environment {
         X86_JOB_NAME = ""
@@ -22,7 +22,7 @@ pipeline {
                 dir("/git-repository/$params.MODEL_ZOO_REPO") {
                     sh """#!/bin/bash
                         set -e
-                        git checkout ${params.MODEL_ZOO_BRANCH}
+                        git checkout -f ${params.MODEL_ZOO_BRANCH}
                         git reset --hard origin/${params.MODEL_ZOO_BRANCH}
                         git lfs checkout .
                    """
