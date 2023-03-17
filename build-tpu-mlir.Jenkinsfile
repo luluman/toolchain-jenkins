@@ -43,6 +43,8 @@ pipeline {
                         set -e
                         source ./envsetup.sh
                         cd regression
+                        pip3() { echo "pip3 has been disabled. 'pip3 \$*' will not run."; }
+                        export -f pip3
                         ./run_all.sh
                     """
                 }
