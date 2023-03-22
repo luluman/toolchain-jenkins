@@ -34,9 +34,9 @@ pipeline {
             }
         }
         stage('Test') {
-            // options {
-            //     timeout(time: 4, unit: 'HOURS')   // timeout on this stage
-            // }
+            options {
+                timeout(time: 5, unit: 'HOURS')   // timeout on this stage
+            }
             steps {
                 dir("$WORKSPACE/tpu-mlir") {
                     sh """#!/bin/bash
@@ -62,11 +62,11 @@ pipeline {
                             // https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md#serializing-local-variables
                             failed_cases = null
                             def failed_models = failed.join("\n")
-                            def commit_20_sha = sh(script: '''git log  --pretty=oneline -n 20 --pretty=format:\"%h\"''', returnStdout: true)
-                            def commit_20 = commit_20_sha.split("\n")
-                            def first_bad = commit_20[0]
-                            def commit_19 = commit_20[1..-1]
-                            for (commit in commit_19) {
+                            def commit_n_sha = sh(script: '''git log  --pretty=oneline -n 30 --pretty=format:\"%h\"''', returnStdout: true)
+                            def commit_n = commit_n_sha.split("\n")
+                            def first_bad = commit_n[0]
+                            def commit_n_1 = commit_n[1..-1]
+                            for (commit in commit_n_1) {
                                 def b = build job: 'blame-commit-tpu-mlir', parameters: [
                                         string(name: 'COMMIT_SHA', value: commit),
                                         text(name: 'CHECK_MODELS', value: failed_models),
