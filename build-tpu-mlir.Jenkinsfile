@@ -18,6 +18,7 @@ pipeline {
                         rm -rf *
                         git clone --depth=20 file:////git-repository/tpu-mlir.git
                         ln -s /git-repository/nnmodels nnmodels
+                        ln -s /git-repository/model-zoo model-zoo
                     """
                 }
             }
