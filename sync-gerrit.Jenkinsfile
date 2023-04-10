@@ -27,8 +27,16 @@ pipeline {
                                     git reset --hard origin/\$(git branch --show-current)
                                     git remote update
                                     git-lfs install
+                                    set +e
                                     git lfs fetch --all
                                     git lfs pull --include="*" --exclude=""
+                                    ret=\$?
+                                    set -e
+                                    if [ \$ret -eq 2 ];then
+                                        echo "failed to fetch some objects!"
+                                        exit 0
+                                     fi
+                                     exit \$ret
                                 elif [ -d ${projects[i]}.git ];then
                                     cd ${projects[i]}.git
                                     git remote update && git lfs fetch --all
