@@ -9,7 +9,7 @@ pipeline {
     }
     agent any
     options {
-        timeout(time: 5, unit: 'HOURS')   // timeout on whole pipeline job
+        timeout(time: 8, unit: 'HOURS')   // timeout on whole pipeline job
     }
     environment {
         X86_JOB_NAME = ""
