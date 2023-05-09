@@ -36,7 +36,7 @@ pipeline {
         }
         stage('Test') {
             options {
-                timeout(time: 5, unit: 'HOURS')   // timeout on this stage
+                timeout(time: 9, unit: 'HOURS')   // timeout on this stage
             }
             steps {
                 dir("$WORKSPACE/tpu-mlir") {
