@@ -87,7 +87,7 @@ pipeline {
                                 source ./envsetup.sh
                                 cd ../
                                 mkdir python -p
-                                pip install https://github.com/sophgo/tpu-perf/releases/download/v1.1.10/tpu_perf-1.1.10-py3-none-manylinux2014_x86_64.whl --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/ -t python
+                                pip install https://github.com/sophgo/tpu-perf/releases/download/v1.2.12/tpu_perf-1.2.12-py3-none-manylinux2014_x86_64.whl --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/ -t python
                             """
                             sh """#!/bin/bash
                                 set -e
@@ -119,7 +119,7 @@ pipeline {
                             sh """#!/bin/bash
                                 set -e
                                 rm -rf *
-                                pip3 install https://github.com/sophgo/tpu-perf/releases/download/v1.1.10/tpu_perf-1.1.10-py3-none-manylinux2014_aarch64.whl --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/
+                                pip3 install https://github.com/sophgo/tpu-perf/releases/download/v1.2.12/tpu_perf-1.2.12-py3-none-manylinux2014_aarch64.whl --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/
                                 cd ../x86-agent-workspace/${X86_JOB_NAME}/${params.MODEL_ZOO_REPO}
                                 python3 -m tpu_perf.run --mlir --list full_cases.txt
                           """
